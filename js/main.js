@@ -1,3 +1,14 @@
+// ============================================================================
+// Module Imports
+// ============================================================================
+
+import {
+  getScaleNotes,
+  getChordNotes,
+  getRotatedScale,
+  TUNINGS,
+} from "./theory.js";
+
 function bootstrap() {
   const rootStyles = getComputedStyle(document.documentElement);
   const accentColor = rootStyles.getPropertyValue("--accent-orange").trim();
@@ -15,3 +26,14 @@ function bootstrap() {
 }
 
 bootstrap();
+
+// ============================================================================
+// Console Diagnostics & Manual Testing Hook
+// ============================================================================
+
+Object.assign(window, {
+  getScaleNotes,
+  getChordNotes,
+  getRotatedScale,
+  TUNINGS,
+});
