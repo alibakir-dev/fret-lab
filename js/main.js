@@ -8,11 +8,20 @@ import {
   getRotatedScale,
   TUNINGS,
 } from "./theory.js";
+
 import {
   renderFretboard,
   attachFretboardListener,
   getFretNote,
 } from "./fretboard.js";
+
+import {
+  getAudioContext,
+  pitchToMidi,
+  midiToFrequency,
+  pitchToFrequency,
+  playNote,
+} from "./audio.js";
 
 function bootstrap() {
   const rootStyles = getComputedStyle(document.documentElement);
@@ -36,8 +45,10 @@ function bootstrap() {
 
     attachFretboardListener(fretboardEl, (selection) => {
       console.log("Fret clicked:", selection);
+      playNote(selection.pitch, "acoustic", 0);
       if (statusEl) {
-        const rootTag = selection.note === boardConfig.rootNote ? " [ROOT]" : "";
+        const rootTag =
+          selection.note === boardConfig.rootNote ? " [ROOT]" : "";
         statusEl.textContent = `[FRET SELECT] String ${selection.string} | Fret ${selection.fret} | Note: ${selection.note} | Pitch: ${selection.pitch}${rootTag}`;
       }
     });
@@ -61,5 +72,10 @@ Object.assign(window, {
   getChordNotes,
   getRotatedScale,
   getFretNote,
+  getAudioContext,
+  pitchToMidi,
+  midiToFrequency,
+  pitchToFrequency,
+  playNote,
   TUNINGS,
 });
