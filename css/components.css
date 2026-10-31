@@ -1,62 +1,205 @@
 .app-shell {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-4) var(--space-6);
-    background-color: var(--bg-surface);
-    border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .brand {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .brand__dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--accent-orange);
-    box-shadow: 0 0 8px var(--accent-orange);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent-orange);
+  box-shadow: 0 0 8px var(--accent-orange);
 }
 
 .brand__title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .brand__badge {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    background-color: var(--accent-orange-dim);
-    color: var(--accent-orange);
-    border: 1px solid var(--accent-orange);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background-color: var(--accent-orange-dim);
+  color: var(--accent-orange);
+  border: 1px solid var(--accent-orange);
 }
 
 .workspace {
-    flex: 1;
-    max-width: 1280px;
-    width: 100%;
-    margin: 0 auto;
-    padding: var(--space-6);
+  flex: 1;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
 .status-panel {
-    padding: var(--space-4);
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    font-family: var(--font-mono);
-    color: var(--text-secondary);
+  padding: var(--space-4);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Interactive 24-Fret Guitar Neck
+   ========================================================================== */
+.fretboard-panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  overflow-x: auto;
+}
+.fretboard {
+  min-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  user-select: none;
+}
+.fretboard__numbers,
+.fretboard__string,
+.fretboard__inlays {
+  display: grid;
+  grid-template-columns: 52px repeat(24, minmax(42px, 1fr));
+}
+.fretboard__number {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+.fretboard__number--marked {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.fretboard__neck {
+  position: relative;
+  background-color: #14171c;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+/* Fret Inlay Dots Layer (sits behind strings, ignores mouse clicks) */
+.fretboard__inlays {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fretboard__inlay-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 72px;
+}
+.fretboard__inlay-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #2a303c;
+}
+/* Guitar Strings & Horizontal Wire Pseudo-Element */
+.fretboard__string {
+  position: relative;
+  height: 40px;
+}
+.fretboard__string::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: var(--string-gauge, 1px);
+  background-color: #4b5563;
+  pointer-events: none;
+  z-index: 1;
+}
+/* Individual Fret Buttons */
+.fret-cell {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.fret-cell:last-child {
+  border-right: none;
+}
+/* Guitar Nut (thick divider after Fret 0 Open String) */
+.fret-cell--open {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-right: 4px solid var(--text-secondary);
+}
+.note-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: scale(0.85);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
+}
+/* Ghost preview when hovering inactive frets */
+.fret-cell:hover .note-badge,
+.fret-cell:focus-visible .note-badge {
+  opacity: 1;
+  transform: scale(1);
+  background-color: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+/* Active Scale Interval Note (Studio Green) */
+.fret-cell--scale .note-badge {
+  opacity: 1;
+  transform: scale(1);
+  background-color: var(--accent-green-dim);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+/* Active Scale Root Note (Signal Orange) */
+.fret-cell--root .note-badge {
+  opacity: 1;
+  transform: scale(1);
+  background-color: var(--accent-orange);
+  color: #111317;
+  font-weight: 700;
+  border: 1px solid var(--accent-orange);
+  box-shadow: 0 0 10px var(--accent-orange-dim);
 }

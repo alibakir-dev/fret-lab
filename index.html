@@ -1,7 +1,6 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FretLab — Guitar Fretboard & Synth</title>
@@ -10,33 +9,39 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
-        rel="stylesheet" />
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- CSS Cascade: Tokens -> Base -> Components -->
     <link rel="stylesheet" href="./css/tokens.css" />
     <link rel="stylesheet" href="./css/base.css" />
     <link rel="stylesheet" href="./css/components.css" />
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="app-shell">
-        <header class="topbar">
-            <div class="brand">
-                <span class="brand__dot" aria-hidden="true"></span>
-                <h1 class="brand__title">FretLab</h1>
-                <span class="brand__badge">v1.0.0-M0</span>
-            </div>
-        </header>
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand__dot" aria-hidden="true"></span>
+          <h1 class="brand__title">FretLab</h1>
+          <span class="brand__badge">v1.0.0-M2</span>
+        </div>
+      </header>
 
-        <main id="app" class="workspace">
-            <div id="boot-status" class="status-panel">
-                Initializing FretLab architecture...
-            </div>
-        </main>
+      <main id="app" class="workspace">
+        <div id="boot-status" class="status-panel">
+          Initializing FretLab architecture...
+        </div>
+
+        <section
+          id="fretboard-mount"
+          class="fretboard-panel"
+          aria-label="Interactive 6-String Guitar Fretboard"
+        ></section>
+      </main>
     </div>
 
     <script type="module" src="./js/main.js"></script>
-</body>
-
+  </body>
 </html>

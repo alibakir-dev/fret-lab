@@ -8,6 +8,11 @@ import {
   getRotatedScale,
   TUNINGS,
 } from "./theory.js";
+import {
+  renderFretboard,
+  attachFretboardListener,
+  getFretNote,
+} from "./fretboard.js";
 
 function bootstrap() {
   const rootStyles = getComputedStyle(document.documentElement);
@@ -16,6 +21,26 @@ function bootstrap() {
   const statusEl = document.getElementById("boot-status");
   if (statusEl) {
     statusEl.textContent = `[SYSTEM READY] M0 Bootstrap OK - Signal Token: ${accentColor}`;
+  }
+
+  // Mount & Render Interactive 24-Fret Neck
+  const fretboardEl = document.getElementById("fretboard-mount");
+  if (fretboardEl) {
+    const boardConfig = {
+      rootNote: "C",
+      scaleType: "major",
+      tuningKey: "standard",
+    };
+
+    renderFretboard(fretboardEl, boardConfig);
+
+    attachFretboardListener(fretboardEl, (selection) => {
+      console.log("Fret clicked:", selection);
+      if (statusEl) {
+        const rootTag = selection.note === boardConfig.rootNote ? " [ROOT]" : "";
+        statusEl.textContent = `[FRET SELECT] String ${selection.string} | Fret ${selection.fret} | Note: ${selection.note} | Pitch: ${selection.pitch}${rootTag}`;
+      }
+    });
   }
 
   console.log(
@@ -35,5 +60,6 @@ Object.assign(window, {
   getScaleNotes,
   getChordNotes,
   getRotatedScale,
+  getFretNote,
   TUNINGS,
 });
