@@ -13,6 +13,7 @@ import {
   renderFretboard,
   attachFretboardListener,
   getFretNote,
+  getChordVoicing,
 } from "./fretboard.js";
 
 import {
@@ -21,6 +22,7 @@ import {
   midiToFrequency,
   pitchToFrequency,
   playNote,
+  strumChord,
 } from "./audio.js";
 
 function bootstrap() {
@@ -77,5 +79,7 @@ Object.assign(window, {
   midiToFrequency,
   pitchToFrequency,
   playNote,
+  strumChord,
+  getChordVoicing,
   TUNINGS,
 });

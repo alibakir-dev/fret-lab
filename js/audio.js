@@ -158,3 +158,15 @@ export function playNote(pitch, toneType = "acoustic", delaySeconds = 0) {
     playFrequency(frequency, toneType, delaySeconds);
   }
 }
+
+// ============================================================================
+// Staggered Polyphonic Chord Strummer
+// ============================================================================
+
+export function strumChord(pitches, toneType = "acoustic", staggerMs = 20) {
+  const staggerSeconds = staggerMs / 1000;
+
+  pitches.forEach((pitch, index) => {
+    playNote(pitch, toneType, staggerSeconds * index);
+  });
+}
