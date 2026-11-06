@@ -50,10 +50,11 @@ export function pitchToFrequency(pitch) {
 
 const ADSR = {
   attack: 0.005,
-  decay: 0.15,
-  sustain: 0.3,
-  release: 0.4,
-  peakGain: 0.25,
+  decay: 0.2,
+  hold: 0.5,
+  sustain: 0.4,
+  release: 2.4,
+  peakGain: 0.18,
 };
 
 // ============================================================================
@@ -77,12 +78,14 @@ export function playFrequency(
   // Schedule ADSR Gain Envelope on the Hardware Audio Clock
   const attackEnd = startTime + ADSR.attack;
   const decayEnd = attackEnd + ADSR.decay;
+  const holdEnd = decayEnd + ADSR.hold;
   const releaseEnd = decayEnd + ADSR.release;
   const sustainGain = ADSR.peakGain * ADSR.sustain;
 
   envelope.gain.setValueAtTime(0.0001, startTime);
   envelope.gain.linearRampToValueAtTime(ADSR.peakGain, attackEnd);
   envelope.gain.exponentialRampToValueAtTime(sustainGain, decayEnd);
+  envelope.gain.exponentialRampToValueAtTime(sustainGain, holdEnd);
   envelope.gain.exponentialRampToValueAtTime(0.0001, releaseEnd);
 
   // Guitar Tone Shaping: Dynamic Low-Pass Filter (Pluck Brightness -> Warmth)
@@ -111,14 +114,14 @@ export function playAcousticPluck(frequency, delaySeconds = 0) {
   const ctx = getAudioContext();
   const startTime = ctx.currentTime + delaySeconds;
   const sampleRate = ctx.sampleRate;
-  const duration = 1.6;
+  const duration = 3.6;
   const totalSamples = Math.floor(sampleRate * duration);
 
   const buffer = ctx.createBuffer(1, totalSamples, sampleRate);
   const samples = buffer.getChannelData(0);
 
   const period = Math.max(2, Math.round(sampleRate / frequency));
-  const damping = Math.min(0.9985, 0.992 + (frequency / 2000) * 0.006);
+  const damping = Math.min(0.9993, 0.9965 + (frequency / 3000) * 0.0028);
 
   // 1. Pick Strike Excitation: Fill first wave cycle with smoothed pluck burst
   let prevNoise = 0;
@@ -138,7 +141,11 @@ export function playAcousticPluck(frequency, delaySeconds = 0) {
   // 3. Play Synthesized String Buffer
   const source = ctx.createBufferSource();
   const outputGain = ctx.createGain();
-  outputGain.gain.setValueAtTime(0.38, startTime);
+  const fadeOutStart = startTime + duration - 0.2;
+
+  outputGain.gain.setValueAtTime(0.32, startTime);
+  outputGain.gain.setValueAtTime(0.32, fadeOutStart);
+
   outputGain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
   source.buffer = buffer;
@@ -163,7 +170,7 @@ export function playNote(pitch, toneType = "acoustic", delaySeconds = 0) {
 // Staggered Polyphonic Chord Strummer
 // ============================================================================
 
-export function strumChord(pitches, toneType = "acoustic", staggerMs = 20) {
+export function strumChord(pitches, toneType = "acoustic", staggerMs = 200) {
   const staggerSeconds = staggerMs / 1000;
 
   pitches.forEach((pitch, index) => {

@@ -34,24 +34,50 @@ function bootstrap() {
     statusEl.textContent = `[SYSTEM READY] M0 Bootstrap OK - Signal Token: ${accentColor}`;
   }
 
+  const toneSelectEl = document.getElementById("tone-select");
+  const strumBtnEl = document.getElementById("strum-btn");
+
+  const boardConfig = {
+    rootNote: "C",
+    scaleType: "major",
+    chordType: "maj7",
+    tuningKey: "standard",
+  };
+
   // Mount & Render Interactive 24-Fret Neck
   const fretboardEl = document.getElementById("fretboard-mount");
   if (fretboardEl) {
-    const boardConfig = {
-      rootNote: "C",
-      scaleType: "major",
-      tuningKey: "standard",
-    };
-
     renderFretboard(fretboardEl, boardConfig);
 
     attachFretboardListener(fretboardEl, (selection) => {
+      const selectedTone = toneSelectEl ? toneSelectEl.value : "acoustic";
+
       console.log("Fret clicked:", selection);
-      playNote(selection.pitch, "acoustic", 0);
+      playNote(selection.pitch, selectedTone, 0);
+
       if (statusEl) {
         const rootTag =
           selection.note === boardConfig.rootNote ? " [ROOT]" : "";
         statusEl.textContent = `[FRET SELECT] String ${selection.string} | Fret ${selection.fret} | Note: ${selection.note} | Pitch: ${selection.pitch}${rootTag}`;
+      }
+    });
+  }
+
+  // Wire Polyphonic Chord Strum Button
+  if (strumBtnEl) {
+    strumBtnEl.addEventListener("click", () => {
+      const selectedTone = toneSelectEl ? toneSelectEl.value : "acoustic";
+
+      const chordPitches = getChordVoicing(
+        boardConfig.rootNote,
+        boardConfig.chordType,
+        boardConfig.tuningKey,
+      );
+
+      strumChord(chordPitches, selectedTone);
+
+      if (statusEl) {
+        statusEl.textContent = `[CHORD STRUM] ${boardConfig.rootNote}${boardConfig.chordType} | Notes: ${chordPitches.join(" - ")} | Tone: ${selectedTone}`;
       }
     });
   }
