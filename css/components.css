@@ -203,3 +203,54 @@
   border: 1px solid var(--accent-orange);
   box-shadow: 0 0 10px var(--accent-orange-dim);
 }
+
+/* ==========================================================================
+   Topbar Synth & Chord Controls
+   ========================================================================== */
+
+.topbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.control-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.control-select {
+  padding: 6px 10px;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.control-select:focus-visible,
+.btn-strum:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
+}
+.btn-strum {
+  padding: 6px 14px;
+  background-color: var(--accent-orange);
+  color: #111317;
+  border: 1px solid var(--accent-orange);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn-strum:hover {
+  filter: brightness(1.1);
+}
+.btn-strum:active {
+  transform: translateY(1px);
+}

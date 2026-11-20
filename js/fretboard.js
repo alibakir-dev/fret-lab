@@ -2,7 +2,12 @@
 // Fretboard Constants & Theory Imports
 // ============================================================================
 
-import { CHROMATIC_SCALE, TUNINGS, getScaleNotes } from "./theory.js";
+import {
+  CHROMATIC_SCALE,
+  TUNINGS,
+  getScaleNotes,
+  getChordNotes,
+} from "./theory.js";
 
 export const TOTAL_FRETS = 24;
 
@@ -14,13 +19,13 @@ const STRING_GAUGES = ["1px", "1.3px", "1.6px", "2px", "2.5px", "3px"];
 // Fret Pitch & Octave Calculation
 // ============================================================================
 
-export function getFretNote(openPitch, fretNumber) {
-  const openNote = openPitch.slice(0, -1);
-  const openOctave = Number(openPitch.slice(-1));
+export function getFretNote(of, fretNumber) {
+  const openNote = of.slice(0, -1);
+  const openOctave = Number(of.slice(-1));
 
   const openIndex = CHROMATIC_SCALE.indexOf(openNote);
   if (openIndex === -1) {
-    throw new Error(`Invalid open string pitch: "${openPitch}"`);
+    throw new Error(`Invalid open string pitch: "${of}"`);
   }
 
   const absoluteSteps = openIndex + fretNumber;
@@ -78,13 +83,13 @@ export function renderFretboard(container, config = {}) {
 
   // 3. Build 6 Guitar Strings & 25 Fret Positions (0..24) per String
   let stringsHtml = "";
-  openStrings.forEach((openPitch, stringIndex) => {
+  openStrings.forEach((of, stringIndex) => {
     const stringNumber = stringIndex + 1;
     const gauge = STRING_GAUGES[stringIndex] || "1.5px";
     let fretsHtml = "";
 
     for (let fret = 0; fret <= TOTAL_FRETS; fret++) {
-      const { note, pitch } = getFretNote(openPitch, fret);
+      const { note, pitch } = getFretNote(of, fret);
       const scaleMatch = activeScaleMap.get(note);
 
       let stateClass = "";
@@ -149,4 +154,38 @@ export function attachFretboardListener(container, onFretSelect) {
       onFretSelect(payload);
     }
   });
+}
+
+// ============================================================================
+// Playable Guitar Chord Voicing Generator (Low-to-High Downstroke Order)
+// ============================================================================
+
+export function getChordVoicing(
+  rootNote = "C",
+  chordType = "maj7",
+  tuningKey = "standard",
+) {
+  const openStrings = TUNINGS[tuningKey] || TUNINGS.standard;
+  const chordData = getChordNotes(rootNote, chordType);
+  const lowToHighStrings = [...openStrings].reverse();
+
+  const pitches = [];
+  let rootFound = false;
+  for (const openPitch of lowToHighStrings) {
+    for (let fret = 0; fret <= 4; fret++) {
+      const { note, pitch } = getFretNote(openPitch, fret);
+
+      const isValidNote = !rootFound
+        ? note === chordData.root
+        : chordData.notes.includes(note);
+
+      if (isValidNote) {
+        pitches.push(pitch);
+        rootFound = true;
+        break;
+      }
+    }
+  }
+
+  return pitches;
 }
