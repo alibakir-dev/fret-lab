@@ -2,255 +2,696 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: radial-gradient(circle at 50% -20%, #252a32 0, var(--bg) 38%);
 }
 
 .topbar {
-  display: flex;
+  min-height: 146px;
+  display: grid;
+  grid-template-columns: minmax(235px, 0.8fr) minmax(440px, 1.4fr) minmax(310px, 1fr);
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4) var(--space-6);
-  background-color: var(--bg-surface);
-  border-bottom: 1px solid var(--border-subtle);
+  gap: 28px;
+  padding: 24px 3vw;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 13px;
 }
 
-.brand__dot {
-  width: 10px;
-  height: 10px;
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #656d78;
+  border-radius: 5px;
+  color: var(--orange);
+  font-family: "DM Mono", monospace;
+  font-weight: 500;
+  letter-spacing: -2px;
+  box-shadow: inset 0 0 0 3px var(--bg);
+}
+
+.brand strong {
+  display: block;
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  line-height: 1.1;
+}
+
+.brand span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font: 500 9px/1.2 "DM Mono", monospace;
+  letter-spacing: 0.08em;
+}
+
+.analysis {
+  padding: 0 28px;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+
+.analysis-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font: 500 9px "DM Mono", monospace;
+  letter-spacing: 0.15em;
+}
+
+.eyebrow i {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background-color: var(--accent-orange);
-  box-shadow: 0 0 8px var(--accent-orange);
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
 }
 
-.brand__title {
-  font-size: 1.15rem;
-  font-weight: 700;
+h1 {
+  font-size: clamp(34px, 3.4vw, 54px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  margin-top: 7px;
+}
+
+.icon-button {
+  border: 1px solid var(--line);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.icon-button.primary {
+  color: white;
+  border-color: var(--orange);
+  background: var(--orange);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--orange) 25%, transparent);
+}
+
+.analysis-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 13px;
+  overflow: hidden;
+}
+
+.formula,
+.analysis-meta code {
+  white-space: nowrap;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 6px 9px;
+  color: #c5cbd4;
+  background: #111419;
+  font: 500 10px "DM Mono", monospace;
+}
+
+.analysis-meta code {
+  color: var(--cyan);
+}
+
+.top-actions {
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.reset-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 10px "DM Mono", monospace;
+  letter-spacing: 0.08em;
+}
+
+.mode-switch {
+  padding: 3px;
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #0e1013;
+}
+
+.mode-switch button {
+  border: 0;
+  border-radius: 3px;
+  padding: 10px 14px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 9px "DM Mono", monospace;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
-.brand__badge {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  background-color: var(--accent-orange-dim);
-  color: var(--accent-orange);
-  border: 1px solid var(--accent-orange);
+.mode-switch button.active {
+  color: white;
+  background: var(--raised);
+  box-shadow: 0 1px 4px #08090b;
 }
 
 .workspace {
   flex: 1;
-  max-width: 1440px;
-  width: 100%;
-  margin: 0 auto;
-  padding: var(--space-6);
+  padding: 28px 3vw 26px;
+  min-height: 410px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  justify-content: center;
 }
 
-.status-panel {
-  padding: var(--space-4);
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
+.stage-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 18px;
 }
 
-/* ==========================================================================
-   Interactive 24-Fret Guitar Neck
-   ========================================================================== */
-.fretboard-panel {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
+.stage-heading > div:first-child,
+.dock-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-index {
+  color: var(--orange);
+  font: 500 10px "DM Mono", monospace;
+  align-self: flex-start;
+  padding-top: 2px;
+}
+
+h2 {
+  font-size: 12px;
+  letter-spacing: 0.13em;
+}
+
+.stage-heading p,
+.dock-title p {
+  color: #6f7782;
+  font: 400 9px "DM Mono", monospace;
+  margin-top: 4px;
+}
+
+.legend {
+  display: flex;
+  gap: 18px;
+  color: var(--muted);
+  font: 500 9px "DM Mono", monospace;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.root-dot {
+  background: var(--orange);
+}
+
+.tone-dot {
+  background: var(--green);
+}
+
+.scale-dot {
+  border: 1px solid var(--cyan);
+}
+
+.fretboard-scroll {
   overflow-x: auto;
+  padding-bottom: 28px;
+  scrollbar-color: var(--fret) transparent;
 }
-.fretboard {
-  min-width: 1120px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  user-select: none;
-}
-.fretboard__numbers,
-.fretboard__string,
-.fretboard__inlays {
+
+.board-grid {
   display: grid;
-  grid-template-columns: 52px repeat(24, minmax(42px, 1fr));
+  grid-template-columns: 88px minmax(1600px, 1fr);
+  min-width: 1688px;
 }
-.fretboard__number {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
+
+.status-label,
+.fret-top-label {
+  height: 26px;
+  color: #6f7782;
+  font: 500 8px "DM Mono", monospace;
+  letter-spacing: 0.12em;
+}
+
+.status-label {
   text-align: center;
 }
-.fretboard__number--marked {
-  color: var(--text-primary);
-  font-weight: 700;
+
+.fret-top-label {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  align-items: start;
 }
-.fretboard__neck {
-  position: relative;
-  background-color: #14171c;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
+
+.fret-top-label span {
+  text-align: center;
+  color: var(--muted);
+  font: 500 9px "DM Mono", monospace;
 }
-/* Fret Inlay Dots Layer (sits behind strings, ignores mouse clicks) */
-.fretboard__inlays {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+
+.status-column {
+  background: #12151a;
+  border: 1px solid var(--line);
+  border-right: 3px solid #aab0b9;
+  border-radius: 7px 0 0 7px;
+  overflow: hidden;
 }
-.fretboard__inlay-slot {
+
+.string-status {
+  height: 43px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 72px;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid #242932;
 }
-.fretboard__inlay-dot {
-  width: 10px;
-  height: 10px;
+
+.string-status:last-child {
+  border-bottom: 0;
+}
+
+.string-status span {
+  color: #767f8b;
+  font: 500 8px "DM Mono", monospace;
+}
+
+.string-status button {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #59616d;
   border-radius: 50%;
-  background-color: #2a303c;
+  display: grid;
+  place-items: center;
+  background: #191d23;
+  color: #d2d6dc;
+  cursor: pointer;
+  font: 500 11px "DM Mono", monospace;
 }
-/* Guitar Strings & Horizontal Wire Pseudo-Element */
-.fretboard__string {
+
+.string-status button.fretted {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.fretboard {
   position: relative;
-  height: 40px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-left: 0;
+  border-radius: 0 7px 7px 0;
+  background: var(--slab);
 }
-.fretboard__string::before {
+
+.string-row {
+  height: 43px;
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  position: relative;
+}
+
+.string-row::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
   top: 50%;
-  transform: translateY(-50%);
-  height: var(--string-gauge, 1px);
-  background-color: #4b5563;
+  background: linear-gradient(#aeb4bd, #4a515b);
+  height: var(--gauge);
   pointer-events: none;
-  z-index: 1;
+  box-shadow: 0 1px 1px #08090b;
 }
-/* Individual Fret Buttons */
+
+.gauge-0 {
+  --gauge: 1px;
+}
+
+.gauge-1 {
+  --gauge: 1.5px;
+}
+
+.gauge-2 {
+  --gauge: 2px;
+}
+
+.gauge-3 {
+  --gauge: 2.5px;
+}
+
+.gauge-4 {
+  --gauge: 3px;
+}
+
+.gauge-5 {
+  --gauge: 4px;
+}
+
 .fret-cell {
   position: relative;
-  z-index: 2;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-right: 1px solid var(--fret);
+  border-bottom: 1px solid #20252c;
   background: transparent;
-  border: none;
-  border-right: 1px solid var(--border-strong);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  cursor: crosshair;
   padding: 0;
 }
-.fret-cell:last-child {
-  border-right: none;
+
+.fret-cell:first-child {
+  background: #111419;
+  border-right: 3px solid #c1c6cd;
 }
-/* Guitar Nut (thick divider after Fret 0 Open String) */
-.fret-cell--open {
-  background-color: rgba(255, 255, 255, 0.02);
-  border-right: 4px solid var(--text-secondary);
+
+.fret-cell:hover {
+  background: color-mix(in srgb, var(--cyan) 8%, transparent);
 }
-.note-badge {
-  width: 26px;
-  height: 26px;
+
+.note-bead {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 3;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 600;
-  opacity: 0;
-  transform: scale(0.85);
-  transition:
-    opacity 0.12s ease,
-    transform 0.12s ease;
-}
-/* Ghost preview when hovering inactive frets */
-.fret-cell:hover .note-badge,
-.fret-cell:focus-visible .note-badge {
-  opacity: 1;
-  transform: scale(1);
-  background-color: var(--bg-elevated);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-strong);
-}
-/* Active Scale Interval Note (Studio Green) */
-.fret-cell--scale .note-badge {
-  opacity: 1;
-  transform: scale(1);
-  background-color: var(--accent-green-dim);
-  color: var(--accent-green);
-  border: 1px solid var(--accent-green);
-}
-/* Active Scale Root Note (Signal Orange) */
-.fret-cell--root .note-badge {
-  opacity: 1;
-  transform: scale(1);
-  background-color: var(--accent-orange);
-  color: #111317;
-  font-weight: 700;
-  border: 1px solid var(--accent-orange);
-  box-shadow: 0 0 10px var(--accent-orange-dim);
+  border: 1px solid color-mix(in srgb, var(--cyan) 50%, #20252c);
+  background: #1c2a31;
+  color: var(--cyan);
+  font: 500 9px "DM Mono", monospace;
+  opacity: 0.52;
 }
 
-/* ==========================================================================
-   Topbar Synth & Chord Controls
-   ========================================================================== */
+.fret-cell.selected .note-bead {
+  opacity: 1;
+  border-color: var(--green);
+  background: var(--green);
+  color: #071a13;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--green) 42%, transparent);
+  font-weight: 700;
+}
 
-.topbar__controls {
+.fret-cell.is-root .note-bead {
+  color: white;
+  border-color: var(--orange);
+  background: var(--orange);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--orange) 52%, transparent);
+}
+
+.inlay-row,
+.fret-numbers {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+}
+
+.inlay-row {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.inlay-cell {
+  display: grid;
+  place-items: center;
+}
+
+.single-inlay {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #555d68;
+}
+
+.double-inlay {
+  width: 5px;
+  height: 21px;
+  border-top: 5px solid #555d68;
+  border-bottom: 5px solid #555d68;
+}
+
+.fret-numbers {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -25px;
+  transform: translateY(100%);
+}
+
+.fret-numbers span {
+  text-align: center;
+  color: var(--muted);
+  font: 500 9px "DM Mono", monospace;
+}
+
+.control-dock {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  border-top: 1px solid var(--line);
+  background: #0e1013;
+}
+
+.dock-section {
+  min-height: 166px;
+  padding: 22px 3vw;
+}
+
+.dock-section + .dock-section {
+  border-left: 1px solid var(--line);
+}
+
+.explorer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 17px 28px;
+}
+
+.dock-title {
+  align-self: center;
+}
+
+.roots {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-self: end;
+  gap: 3px;
+}
+
+.roots button {
+  min-width: 31px;
+  height: 33px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #16191e;
+  cursor: pointer;
+  color: var(--muted);
+  font: 500 10px "DM Mono", monospace;
+}
+
+.roots button.active {
+  border-color: var(--orange);
+  background: var(--orange);
+  color: white;
+  box-shadow: 0 0 15px color-mix(in srgb, var(--orange) 25%, transparent);
+}
+
+.select-wrap {
+  position: relative;
+  min-width: 190px;
+  align-self: start;
+}
+
+.select-wrap > span,
+.tempo-readout > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #69717c;
+  font: 500 8px "DM Mono", monospace;
+  letter-spacing: 0.1em;
+}
+
+.select-wrap select {
+  width: 100%;
+  height: 38px;
+  padding: 0 34px 0 12px;
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  outline: none;
+  background: #171a1f;
+  color: #dfe2e6;
+  font: 500 10px "DM Mono", monospace;
+}
+
+.select-wrap svg {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  pointer-events: none;
+  color: var(--muted);
+}
+
+.audio {
+  display: grid;
+  grid-template-columns: auto minmax(150px, 0.6fr) minmax(320px, 1.2fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.metronome {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 15px;
+}
+
+.tempo-readout strong {
+  font: 500 25px "DM Mono", monospace;
+}
+
+.tempo-readout em {
+  color: var(--muted);
+  font: normal 8px "DM Mono", monospace;
+  margin-left: 4px;
+}
+
+input[type="range"] {
+  accent-color: var(--orange);
+  width: 100%;
+}
+
+.leds {
+  display: flex;
+  gap: 5px;
+}
+
+.leds i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #363c45;
+}
+
+.leds i.lit {
+  background: var(--orange);
+  box-shadow: 0 0 8px var(--orange);
+}
+
+.metro-button {
+  height: 38px;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-}
-.control-label {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-}
-.control-select {
-  padding: 6px 10px;
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--green) 12%, transparent);
+  color: var(--green);
   cursor: pointer;
+  font: 600 9px "DM Mono", monospace;
 }
-.control-select:focus-visible,
-.btn-strum:focus-visible {
-  outline: 2px solid var(--accent-orange);
-  outline-offset: 2px;
+
+.metro-button.running {
+  color: var(--orange);
+  border-color: var(--orange);
+  background: color-mix(in srgb, var(--orange) 10%, transparent);
 }
-.btn-strum {
-  padding: 6px 14px;
-  background-color: var(--accent-orange);
-  color: #111317;
-  border: 1px solid var(--accent-orange);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  cursor: pointer;
+
+@media (max-width: 1050px) {
+  .topbar {
+    grid-template-columns: 1fr 1.5fr;
+  }
+
+  .top-actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-self: stretch;
+    justify-content: space-between;
+  }
+
+  .control-dock {
+    grid-template-columns: 1fr;
+  }
+
+  .dock-section + .dock-section {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
 }
-.btn-strum:hover {
-  filter: brightness(1.1);
-}
-.btn-strum:active {
-  transform: translateY(1px);
+
+@media (max-width: 700px) {
+  .topbar {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .analysis {
+    border: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+  }
+
+  .workspace {
+    padding-inline: 20px;
+  }
+
+  .stage-heading {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .explorer,
+  .audio {
+    grid-template-columns: 1fr;
+  }
+
+  .roots {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .metronome {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .metro-button {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
 }

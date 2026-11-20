@@ -13,7 +13,6 @@ export const TOTAL_FRETS = 24;
 
 const SINGLE_INLAY_FRETS = new Set([3, 5, 7, 9, 15, 17, 19, 21]);
 const DOUBLE_INLAY_FRETS = new Set([12, 24]);
-const STRING_GAUGES = ["1px", "1.3px", "1.6px", "2px", "2.5px", "3px"];
 
 // ============================================================================
 // Fret Pitch & Octave Calculation
@@ -46,9 +45,11 @@ export function getFretNote(of, fretNumber) {
 
 export function renderFretboard(container, config = {}) {
   const {
-    rootNote = "A",
-    scaleType = "minor-pentatonic",
+    rootNote = "C",
+    scaleType = "major",
     tuningKey = "standard",
+    displayMode = "intervals",
+    selectedFrets = [0, 0, 0, 2, 3, null],
   } = config;
 
   const openStrings = TUNINGS[tuningKey] || TUNINGS.standard;
@@ -58,77 +59,104 @@ export function renderFretboard(container, config = {}) {
     scaleData.steps.map((step) => [step.note, step]),
   );
 
-  // 1. Build Fret Numbers Row (0 = OPEN, 1..24)
-  let numbersHTML = "";
+  // 1. Build Top Fret Numbers Row (0..24)
+  let numbersHtml = "";
   for (let fret = 0; fret <= TOTAL_FRETS; fret++) {
-    const isMarked =
-      SINGLE_INLAY_FRETS.has(fret) || DOUBLE_INLAY_FRETS.has(fret);
-    const markedClass = isMarked ? " fretboard__number--marked" : "";
-    const label = fret === 0 ? "OPEN" : fret;
-    numbersHTML += `<span class="fretboard__number${markedClass}">${label}</span>`;
+    numbersHtml += `<span>${fret}</span>`;
   }
 
-  // 2. Build Fret Inlay Backdrop LAyer
+  // 2. Build Fret Inlay Backdrop Layer
   let inlaysHtml = "";
   for (let fret = 0; fret <= TOTAL_FRETS; fret++) {
-    let dots = "";
+    let marker = "";
     if (SINGLE_INLAY_FRETS.has(fret)) {
-      dots = '<span class="fretboard__inlay-dot"></span>';
+      marker = '<i class="single-inlay"></i>';
     } else if (DOUBLE_INLAY_FRETS.has(fret)) {
-      dots =
-        '<span class="fretboard__inlay-dot"></span><span class="fretboard__inlay-dot"></span>';
+      marker = '<i class="double-inlay"></i>';
     }
-    inlaysHtml += `<div class="fretboard__inlay-slot">${dots}</div>`;
+    inlaysHtml += `<div class="inlay-cell">${marker}</div>`;
   }
 
-  // 3. Build 6 Guitar Strings & 25 Fret Positions (0..24) per String
+  // 3. Build Left String Status Column & 6 Guitar String Rows
+  let statusRowsHtml = "";
   let stringsHtml = "";
-  openStrings.forEach((of, stringIndex) => {
-    const stringNumber = stringIndex + 1;
-    const gauge = STRING_GAUGES[stringIndex] || "1.5px";
-    let fretsHtml = "";
 
+  openStrings.forEach((openPitch, stringIndex) => {
+    const stringNumber = stringIndex + 1;
+    const openNote = openPitch.slice(0, -1);
+    const activeFret = selectedFrets[stringIndex];
+
+    let statusSymbol = "×";
+    let statusBtnClass = "";
+    if (activeFret === 0) {
+      statusSymbol = "O";
+    } else if (typeof activeFret === "number" && activeFret > 0) {
+      statusSymbol = "•";
+      statusBtnClass = "fretted";
+    }
+
+    statusRowsHtml += `
+      <div class="string-status">
+        <span>${stringNumber} · ${openNote}</span>
+        <button
+          type="button"
+          class="${statusBtnClass}"
+          data-status-string="${stringNumber}"
+          aria-label="Toggle string ${stringNumber} status"
+        >${statusSymbol}</button>
+      </div>`;
+
+    let fretsHtml = "";
     for (let fret = 0; fret <= TOTAL_FRETS; fret++) {
-      const { note, pitch } = getFretNote(of, fret);
+      const { note, pitch } = getFretNote(openPitch, fret);
       const scaleMatch = activeScaleMap.get(note);
 
-      let stateClass = "";
-      if (scaleMatch) {
-        stateClass = scaleMatch.isRoot
-          ? " fret-cell--root"
-          : " fret-cell--scale";
+      const isSelected = activeFret === fret;
+      const isRootNote = note === rootNote;
+
+      const selectedClass = isSelected ? " selected" : "";
+      const rootClass = isSelected && isRootNote ? " is-root" : "";
+
+      let beadHtml = "";
+      if (scaleMatch || isSelected) {
+        const intervalLabel = isRootNote
+          ? "R"
+          : scaleMatch
+            ? scaleMatch.interval
+            : note;
+        const badgeText = displayMode === "intervals" ? intervalLabel : note;
+        beadHtml = `<span class="note-bead">${badgeText}</span>`;
       }
-      const openClass = fret === 0 ? " fret-cell--open" : "";
 
       fretsHtml += `
         <button
           type="button"
-          class="fret-cell${openClass}${stateClass}"
+          class="fret-cell${selectedClass}${rootClass}"
           data-string="${stringNumber}"
           data-fret="${fret}"
           data-note="${note}"
           data-pitch="${pitch}"
           aria-label="String ${stringNumber}, Fret ${fret}, Note ${pitch}"
-        >
-          <span class="note-badge">${note}</span>
-        </button>`;
+        >${beadHtml}</button>`;
     }
 
     stringsHtml += `
-        <div class="fretboard__string" style="--string-gauge: ${gauge}">
-          ${fretsHtml}
-        </div>`;
+      <div class="string-row gauge-${stringIndex}">
+        ${fretsHtml}
+      </div>`;
   });
 
-  // 4. Commit Complete Fretboard HTML in a single DOM Write
+  // 4. Commit Complete 2x2 Board Grid in a Single DOM Write
   container.innerHTML = `
-        <div class="fretboard">
-          <div class="fretboard__numbers">${numbersHTML}</div>
-          <div class="fretboard__neck">
-            <div class="fretboard__inlays" aria-hidden="true">${inlaysHtml}</div>
-            ${stringsHtml}
-          </div>
-        </div>`;
+    <div class="board-grid">
+      <div class="status-label">STATUS</div>
+      <div class="fret-top-label">${numbersHtml}</div>
+      <div class="status-column">${statusRowsHtml}</div>
+      <div class="fretboard">
+        <div class="inlay-row" aria-hidden="true">${inlaysHtml}</div>
+        ${stringsHtml}
+      </div>
+    </div>`;
 }
 
 // ============================================================================

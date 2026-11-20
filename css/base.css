@@ -1,29 +1,26 @@
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    font-size: 14px;
-    -webkit-text-size-adjust: 100%;
+* {
+  box-sizing: border-box;
 }
 
 body {
-    min-height: 100vh;
-    background-color: var(--bg-canvas);
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg);
 }
 
 button,
-input,
-select {
-    font: inherit;
-    color: inherit;
+select,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
 }
